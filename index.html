@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .chat-container { height: calc(100vh - 180px); }
+        .chat-container { height: calc(100vh - 200px); }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .bot-bubble { border-bottom-left-radius: 2px; }
         .user-bubble { border-bottom-right-radius: 2px; }
@@ -30,6 +30,9 @@
                     <p class="text-xs text-indigo-200">Innovación Bot • En línea</p>
                 </div>
             </div>
+            <button onclick="clearChat()" class="md:hidden bg-white/10 p-2 rounded-lg border border-white/20">
+                <i data-lucide="eraser" class="w-5 h-5 text-white"></i>
+            </button>
             <div class="hidden md:flex gap-4 text-sm font-medium text-indigo-100 italic">
                 "Gestión y Seguimiento de Proyectos"
             </div>
@@ -53,33 +56,25 @@
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="sendQuickMessage('Resumen')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-xs">📊 Resumen</button>
                     <button onclick="sendQuickMessage('Ramon')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-xs font-bold">👑 Ramón</button>
+                    <button onclick="clearChat()" class="col-span-2 mt-2 bg-rose-500 hover:bg-rose-600 p-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i> LIMPIAR CHAT
+                    </button>
                 </div>
             </div>
         </aside>
 
         <section class="md:col-span-2 flex flex-col">
             <div id="chat-window" class="chat-container overflow-y-auto p-2 space-y-4 scroll-smooth">
-                <div class="flex gap-3 animate-fade">
-                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
-                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble">
-                        <p class="text-sm text-slate-700">
-                            Saludos Jefe. Bienvenido al portal de **Innovación**. 
-                            <br><br>
-                            Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji o Luis**.
-                        </p>
-                    </div>
                 </div>
-            </div>
 
             <div class="mt-4 glass p-2 rounded-2xl border border-slate-200 shadow-xl flex gap-2">
-                <input type="text" id="user-input" placeholder="Escribe 'Resumen' o un nombre (ej: Pedro)..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
+                <input type="text" id="user-input" placeholder="Escribe 'Resumen' o un nombre..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
                 <button onclick="sendMessage()" class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition shadow-md"><i data-lucide="send" class="w-5 h-5"></i></button>
             </div>
         </section>
     </main>
 
     <script>
-        lucide.createIcons();
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
 
@@ -94,16 +89,15 @@
             { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo - Fase 1", progress: 30, status: "Iniciando", priority: "Alta" }
         ];
 
-        function sendMessage() {
-            const text = userInput.value.trim();
-            if (text === "") return;
-            renderMessage(text, 'user');
-            userInput.value = "";
-            setTimeout(() => { botLogic(text.toLowerCase()); }, 500);
+        // Función para limpiar el chat
+        function clearChat() {
+            chatWindow.innerHTML = '';
+            renderMessage(`
+                Saludos Jefe. Bienvenido al portal de **Innovación**. 
+                <br><br>
+                Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji o Luis**.
+            `, 'bot');
         }
-
-        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
-        function sendQuickMessage(msg) { userInput.value = msg; sendMessage(); }
 
         function renderMessage(content, sender) {
             const div = document.createElement('div');
@@ -117,7 +111,23 @@
             lucide.createIcons();
         }
 
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (text === "") return;
+            renderMessage(text, 'user');
+            userInput.value = "";
+            setTimeout(() => { botLogic(text.toLowerCase()); }, 500);
+        }
+
+        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+        function sendQuickMessage(msg) { userInput.value = msg; sendMessage(); }
+
         function botLogic(text) {
+            if (text === 'limpiar' || text === 'borrar') {
+                clearChat();
+                return;
+            }
+
             if (text.includes('resumen')) {
                 let html = "<b>Estado de Proyectos de Innovación:</b><br><br>";
                 teamData.forEach(item => {
@@ -154,7 +164,6 @@
                                     <p class="text-[10px] text-right mt-1 font-bold text-rose-600">0% - PENDIENTE</p>
                                 </div>
                             </div>
-                            <p class="mt-3 text-[10px] italic text-slate-500 text-center uppercase tracking-widest font-bold">Liderazgo en Acción</p>
                         </div>
                     `, 'bot');
                 } else {
@@ -162,7 +171,6 @@
                         <div class="p-1">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-bold text-indigo-900">${person.name}</h4>
-                                <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority}</span>
                             </div>
                             <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task}</p>
                             <div class="w-full bg-slate-200 h-1.5 rounded-full">
@@ -173,9 +181,15 @@
                     `, 'bot');
                 }
             } else {
-                renderMessage("Por favor, introduzca el nombre de un colaborador del departamento.", 'bot');
+                renderMessage("Por favor, introduzca el nombre de un colaborador.", 'bot');
             }
         }
+
+        // Carga inicial
+        window.onload = () => {
+            clearChat();
+            lucide.createIcons();
+        };
     </script>
 </body>
 </html>
