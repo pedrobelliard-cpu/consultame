@@ -45,9 +45,9 @@
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                 <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Estado del Departamento</h2>
                 <div class="space-y-4 text-sm">
-                    <div class="flex justify-between"><span>Analistas Activos</span><span class="font-bold text-indigo-600">8</span></div>
-                    <div class="flex justify-between"><span>Proyectos en Meta</span><span class="font-bold text-emerald-600">85%</span></div>
-                    <div class="flex justify-between"><span>Hitos Pendientes</span><span class="font-bold text-amber-600">4</span></div>
+                    <div class="flex justify-between"><span>Analistas Activos</span><span class="font-bold text-indigo-600">9</span></div>
+                    <div class="flex justify-between"><span>Proyectos en Meta</span><span class="font-bold text-emerald-600">88%</span></div>
+                    <div class="flex justify-between"><span>Hitos Pendientes</span><span class="font-bold text-amber-600">3</span></div>
                 </div>
             </div>
 
@@ -64,8 +64,7 @@
         </aside>
 
         <section class="md:col-span-2 flex flex-col">
-            <div id="chat-window" class="chat-container overflow-y-auto p-2 space-y-4 scroll-smooth">
-                </div>
+            <div id="chat-window" class="chat-container overflow-y-auto p-2 space-y-4 scroll-smooth"></div>
 
             <div class="mt-4 glass p-2 rounded-2xl border border-slate-200 shadow-xl flex gap-2">
                 <input type="text" id="user-input" placeholder="Escribe 'Resumen' o un nombre..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
@@ -80,22 +79,22 @@
 
         const teamData = [
             { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 70, status: "En Verificación", priority: "Alta" },
-            { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 88, status: "Al Día", priority: "Media" },
+            { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 95, status: "Al Día", priority: "Media" },
             { id: "PROY-03", name: "Rosanny Contreras", task: "Documentación de Proyectos en Curso", progress: 60, status: "Actualizando", priority: "Media" },
             { id: "PROY-04", name: "Jorge Tonos", task: "Control de Hitos y Entregables", progress: 45, status: "En Revisión", priority: "Alta" },
             { id: "PROY-05", name: "Iris Cesa", task: "Auditoría de Calidad en Proyectos", progress: 95, status: "Casi Listo", priority: "Baja" },
             { id: "PROY-06", name: "Ramon Sanchez", isBoss: true, task: "Reunion POA y PEI", progress: 100, task2: "Reunion sensibilización directores", progress2: 0 },
             { id: "PROY-07", name: "Anji Carolina", task: "Evaluación de Resultados Mensuales", progress: 75, status: "En Proceso", priority: "Media" },
-            { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo - Fase 1", progress: 30, status: "Iniciando", priority: "Alta" }
+            { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo - Fase 1", progress: 30, status: "Iniciando", priority: "Alta" },
+            { id: "PROY-09", name: "Victor Peña", task: "Desarrollo app de IA", progress: 90, status: "En Pruebas", priority: "Alta" }
         ];
 
-        // Función para limpiar el chat
         function clearChat() {
             chatWindow.innerHTML = '';
             renderMessage(`
                 Saludos Jefe. Bienvenido al portal de **Innovación**. 
                 <br><br>
-                Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji o Luis**.
+                Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji, Luis o Victor**.
             `, 'bot');
         }
 
@@ -171,6 +170,7 @@
                         <div class="p-1">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-bold text-indigo-900">${person.name}</h4>
+                                <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority || 'Normal'}</span>
                             </div>
                             <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task}</p>
                             <div class="w-full bg-slate-200 h-1.5 rounded-full">
@@ -181,11 +181,10 @@
                     `, 'bot');
                 }
             } else {
-                renderMessage("Por favor, introduzca el nombre de un colaborador.", 'bot');
+                renderMessage("Por favor, introduzca el nombre de un colaborador del departamento.", 'bot');
             }
         }
 
-        // Carga inicial
         window.onload = () => {
             clearChat();
             lucide.createIcons();
