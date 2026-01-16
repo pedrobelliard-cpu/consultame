@@ -30,11 +30,8 @@
                     <p class="text-xs text-indigo-200">Innovación Bot • En línea</p>
                 </div>
             </div>
-            <div class="hidden md:flex gap-4 text-sm font-medium">
-                <div class="bg-indigo-800 px-3 py-1 rounded-full text-indigo-100 flex items-center gap-2">
-                    <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                    Equipo Sincronizado
-                </div>
+            <div class="hidden md:flex gap-4 text-sm font-medium text-indigo-100 italic">
+                "Gestión y Seguimiento de Proyectos"
             </div>
         </div>
     </header>
@@ -43,82 +40,55 @@
         
         <aside class="hidden md:block space-y-4">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Resumen del Departamento</h2>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-600 text-sm">Personal Activo</span>
-                        <span class="font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">8</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-600 text-sm">Tareas en Curso</span>
-                        <span class="font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">15</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-600 text-sm">Críticas</span>
-                        <span class="font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded">3</span>
-                    </div>
+                <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Estado del Departamento</h2>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between"><span>Analistas Activos</span><span class="font-bold text-indigo-600">8</span></div>
+                    <div class="flex justify-between"><span>Proyectos en Meta</span><span class="font-bold text-emerald-600">85%</span></div>
+                    <div class="flex justify-between"><span>Hitos Pendientes</span><span class="font-bold text-amber-600">4</span></div>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded-2xl shadow-md text-white">
-                <h3 class="font-semibold mb-2">Comandos Rápidos</h3>
-                <div class="flex flex-wrap gap-2 mt-3">
-                    <button onclick="sendQuickMessage('/resumen')" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition">/resumen</button>
-                    <button onclick="sendQuickMessage('Cesar')" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition">Cesar</button>
-                    <button onclick="sendQuickMessage('Pedro')" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition">Pedro</button>
-                    <button onclick="sendQuickMessage('Anji')" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition">Anji</button>
+            <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded-2xl shadow-md text-white text-sm">
+                <h3 class="font-semibold mb-3 flex items-center gap-2"><i data-lucide="layout" class="w-4 h-4 text-amber-300"></i> Panel de Control</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="sendQuickMessage('Resumen')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-xs">📊 Resumen</button>
+                    <button onclick="sendQuickMessage('Ramon')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-xs font-bold">👑 Ramón</button>
                 </div>
             </div>
         </aside>
 
         <section class="md:col-span-2 flex flex-col">
             <div id="chat-window" class="chat-container overflow-y-auto p-2 space-y-4 scroll-smooth">
-                
                 <div class="flex gap-3 animate-fade">
-                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                        <i data-lucide="bot" class="w-5 h-5"></i>
-                    </div>
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
                     <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble">
-                        <p class="text-sm leading-relaxed text-slate-700">
-                            Saludos Jefe. Bienvenido al portal de **Innovación**. 
-                            <br><br>
-                            Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji o Luis**.
-                        </p>
-                        <span class="text-[10px] text-slate-400 mt-2 block">Sistema en línea</span>
+                        <p class="text-sm text-slate-700">Bienvenido al sistema de seguimiento del **Departamento de Innovación**. <br><br>¿De qué proyecto o colaborador necesitas información hoy?</p>
                     </div>
                 </div>
-
             </div>
 
-            <div class="mt-4 glass p-2 rounded-2xl border border-slate-200 shadow-xl">
-                <div class="flex gap-2">
-                    <input type="text" id="user-input" placeholder="Escribe un nombre o 'resumen'..." 
-                           class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm"
-                           onkeypress="handleKeyPress(event)">
-                    <button onclick="sendMessage()" class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
-                        <i data-lucide="send" class="w-5 h-5"></i>
-                    </button>
-                </div>
+            <div class="mt-4 glass p-2 rounded-2xl border border-slate-200 shadow-xl flex gap-2">
+                <input type="text" id="user-input" placeholder="Consultar nombre o proyecto..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition shadow-md"><i data-lucide="send" class="w-5 h-5"></i></button>
             </div>
         </section>
     </main>
 
     <script>
         lucide.createIcons();
-
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
 
-        // EQUIPO ACTUALIZADO CON LOS NOMBRES SOLICITADOS
+        // EQUIPO ACTUALIZADO CON TAREAS DE PROYECTOS Y SEGUIMIENTO
         const teamData = [
-            { id: "INV-01", name: "Cesar Guzman", task: "Estrategia de Innovación 2026", progress: 85, status: "En Revisión", priority: "Crítica" },
-            { id: "INV-02", name: "Pedro Belliard", task: "Arquitectura de Microservicios", progress: 92, status: "Finalizando", priority: "Alta" },
-            { id: "INV-03", name: "Rosanny Contreras", task: "Diseño de Interfaz UX/UI", progress: 65, status: "En Proceso", priority: "Media" },
-            { id: "INV-04", name: "Jorge Tonos", task: "Seguridad y Ciberinteligencia", progress: 40, status: "Bloqueado", priority: "Crítica" },
-            { id: "INV-05", name: "Iris Cesa", task: "Análisis de Datos y BI", progress: 100, status: "Completado", priority: "Baja" },
-            { id: "INV-06", name: "Ramon Sanchez", task: "Desarrollo Backend Core", progress: 55, status: "En Proceso", priority: "Alta" },
-            { id: "INV-07", name: "Anji Carolina", task: "Control de Calidad (QA)", progress: 78, status: "En Pruebas", priority: "Media" },
-            { id: "INV-08", name: "Luis Camilo", task: "Implementación en Cliente", progress: 20, status: "Iniciando", priority: "Alta" }
+            { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 70, status: "En Verificación", priority: "Alta" },
+            { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 88, status: "Al Día", priority: "Media" },
+            { id: "PROY-03", name: "Rosanny Contreras", task: "Documentación de Proyectos en Curso", progress: 60, status: "Actualizando", priority: "Media" },
+            { id: "PROY-04", name: "Jorge Tonos", task: "Control de Hitos y Entregables", progress: 45, status: "En Revisión", priority: "Alta" },
+            { id: "PROY-05", name: "Iris Cesa", task: "Auditoría de Calidad en Proyectos", progress: 95, status: "Casi Listo", priority: "Baja" },
+            { id: "PROY-06", name: "Ramon Sanchez", isBoss: true, task: "Reunion POA y PEI", progress: 100, task2: "Reunion sensibilización directores", progress2: 0 },
+            { id: "PROY-07", name: "Anji Carolina", task: "Evaluación de Resultados Mensuales", progress: 75, status: "En Proceso", priority: "Media" },
+            { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo - Fase 1", progress: 30, status: "Iniciando", priority: "Alta" }
         ];
 
         function sendMessage() {
@@ -126,28 +96,19 @@
             if (text === "") return;
             renderMessage(text, 'user');
             userInput.value = "";
-            setTimeout(() => { botLogic(text.toLowerCase()); }, 600);
+            setTimeout(() => { botLogic(text.toLowerCase()); }, 500);
         }
 
         function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
-        
-        function sendQuickMessage(msg) { 
-            userInput.value = msg; 
-            sendMessage(); 
-        }
+        function sendQuickMessage(msg) { userInput.value = msg; sendMessage(); }
 
         function renderMessage(content, sender) {
             const div = document.createElement('div');
             div.className = `flex gap-3 animate-fade ${sender === 'user' ? 'justify-end' : ''}`;
-            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            if (sender === 'user') {
-                div.innerHTML = `<div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-md max-w-[85%] user-bubble"><p class="text-sm">${content}</p></div>`;
-            } else {
-                div.innerHTML = `
-                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
-                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble text-sm text-slate-700">${content}</div>`;
-            }
+            div.innerHTML = sender === 'user' ? 
+                `<div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-md max-w-[85%] user-bubble text-sm">${content}</div>` :
+                `<div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
+                 <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble text-sm text-slate-700">${content}</div>`;
             chatWindow.appendChild(div);
             chatWindow.scrollTop = chatWindow.scrollHeight;
             lucide.createIcons();
@@ -155,49 +116,61 @@
 
         function botLogic(text) {
             if (text.includes('resumen')) {
-                let html = "<b>Estado Global del Equipo:</b><br><br>";
+                let html = "<b>Estado de Proyectos de Innovación:</b><br><br>";
                 teamData.forEach(item => {
-                    const color = item.progress > 80 ? 'bg-emerald-500' : item.progress > 40 ? 'bg-amber-500' : 'bg-rose-500';
-                    html += `
-                        <div class="mb-3 p-2 border-b border-slate-100">
-                            <div class="flex justify-between text-[11px] mb-1">
-                                <span class="font-bold">${item.name}</span>
-                                <span>${item.progress}%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full">
-                                <div class="${color} h-1.5 rounded-full" style="width: ${item.progress}%"></div>
-                            </div>
-                        </div>`;
+                    if(!item.isBoss) {
+                        html += `<div class="mb-2 text-[11px]"><b>${item.name}:</b> ${item.task} (${item.progress}%)</div>`;
+                    }
                 });
                 renderMessage(html, 'bot');
-            } else {
-                // Búsqueda inteligente por nombre
-                const person = teamData.find(p => text.includes(p.name.toLowerCase().split(' ')[0]));
-                
-                if (person) {
-                    const pColor = person.priority === 'Crítica' ? 'text-rose-600 bg-rose-50' : 'text-indigo-600 bg-indigo-50';
+                return;
+            }
+
+            const person = teamData.find(p => text.includes(p.name.toLowerCase().split(' ')[0]));
+            
+            if (person) {
+                if (person.isBoss) {
                     renderMessage(`
                         <div class="p-1">
-                            <p class="mb-2">Detalles para <b>${person.name}</b>:</p>
-                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${pColor}">${person.priority}</span>
-                                    <span class="text-[10px] text-slate-400">${person.id}</span>
-                                </div>
-                                <h4 class="font-bold text-indigo-900">${person.task}</h4>
-                                <p class="text-xs mt-1 italic text-slate-600">Estado: ${person.status}</p>
-                                <div class="mt-3">
-                                    <div class="flex justify-between text-[10px] mb-1"><span>Progreso</span><span>${person.progress}%</span></div>
-                                    <div class="w-full bg-slate-200 h-2 rounded-full">
-                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: ${person.progress}%"></div>
+                            <p class="mb-3 text-indigo-700 font-bold flex items-center gap-2">
+                                <i data-lucide="crown" class="w-4 h-4"></i> ¡Saludos, Director Ramón!
+                            </p>
+                            <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 shadow-inner">
+                                <div class="mb-4">
+                                    <h4 class="font-bold text-slate-800 text-xs">${person.task}</h4>
+                                    <div class="w-full bg-slate-200 h-2 rounded-full mt-1">
+                                        <div class="bg-emerald-500 h-2 rounded-full" style="width: 100%"></div>
                                     </div>
+                                    <p class="text-[10px] text-right mt-1 font-bold text-emerald-600">100% - CONCLUIDO</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-xs">${person.task2}</h4>
+                                    <div class="w-full bg-slate-200 h-2 rounded-full mt-1">
+                                        <div class="bg-rose-500 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <p class="text-[10px] text-right mt-1 font-bold text-rose-600">0% - PENDIENTE</p>
                                 </div>
                             </div>
+                            <p class="mt-3 text-[10px] italic text-slate-500 text-center uppercase tracking-widest font-bold">Liderazgo en Acción</p>
                         </div>
                     `, 'bot');
                 } else {
-                    renderMessage("Lo siento, no encuentro a esa persona. Intenta con nombres como 'Pedro', 'Cesar' o 'Anji'.", 'bot');
+                    renderMessage(`
+                        <div class="p-1">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold text-indigo-900">${person.name}</h4>
+                                <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority}</span>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task}</p>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full">
+                                <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${person.progress}%"></div>
+                            </div>
+                            <div class="flex justify-between mt-1"><span class="text-[10px] italic">${person.status}</span><span class="text-[10px] font-bold">${person.progress}%</span></div>
+                        </div>
+                    `, 'bot');
                 }
+            } else {
+                renderMessage("Por favor, introduzca el nombre de un colaborador del departamento.", 'bot');
             }
         }
     </script>
