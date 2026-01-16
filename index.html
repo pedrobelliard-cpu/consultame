@@ -62,13 +62,17 @@
                 <div class="flex gap-3 animate-fade">
                     <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
                     <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble">
-                        <p class="text-sm text-slate-700">Bienvenido al sistema de seguimiento del **Departamento de Innovación**. <br><br>¿De qué proyecto o colaborador necesitas información hoy?</p>
+                        <p class="text-sm text-slate-700">
+                            Saludos Jefe. Bienvenido al portal de **Innovación**. 
+                            <br><br>
+                            Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji o Luis**.
+                        </p>
                     </div>
                 </div>
             </div>
 
             <div class="mt-4 glass p-2 rounded-2xl border border-slate-200 shadow-xl flex gap-2">
-                <input type="text" id="user-input" placeholder="Consultar nombre o proyecto..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
+                <input type="text" id="user-input" placeholder="Escribe 'Resumen' o un nombre (ej: Pedro)..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
                 <button onclick="sendMessage()" class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition shadow-md"><i data-lucide="send" class="w-5 h-5"></i></button>
             </div>
         </section>
@@ -79,7 +83,6 @@
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
 
-        // EQUIPO ACTUALIZADO CON TAREAS DE PROYECTOS Y SEGUIMIENTO
         const teamData = [
             { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 70, status: "En Verificación", priority: "Alta" },
             { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 88, status: "Al Día", priority: "Media" },
