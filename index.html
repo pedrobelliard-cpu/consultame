@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConsultaME Innovación Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chat-container { height: calc(100vh - 180px); }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .bot-bubble { border-bottom-left-radius: 2px; }
+        .user-bubble { border-bottom-right-radius: 2px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <header class="bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <i data-lucide="bot" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">ConsultaME</h1>
+                    <p class="text-xs text-indigo-200">Innovación Bot • En línea</p>
+                </div>
+            </div>
+            <div class="hidden md:flex gap-4 text-sm font-medium">
+                <div class="bg-indigo-800 px-3 py-1 rounded-full text-indigo-100 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                    Sistema Sincronizado
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+        
+        <aside class="hidden md:block space-y-4">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Resumen del Equipo</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-600 text-sm">Tareas Activas</span>
+                        <span class="font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">12</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-600 text-sm">Completadas hoy</span>
+                        <span class="font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">5</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-600 text-sm">Retrasos</span>
+                        <span class="font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded">2</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded-2xl shadow-md text-white">
+                <h3 class="font-semibold mb-2">Comandos Rápidos</h3>
+                <p class="text-xs text-indigo-100 mb-4">Haz clic para consultar rápido:</p>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="sendQuickMessage('/resumen')" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition">/resumen</button>
+                    <button onclick="sendQuickMessage('/proyectos')" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition">/proyectos</button>
+                    <button onclick="sendQuickMessage('/retrasos')" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition">/retrasos</button>
+                </div>
+            </div>
+        </aside>
+
+        <section class="md:col-span-2 flex flex-col">
+            <div id="chat-window" class="chat-container overflow-y-auto p-2 space-y-4 scroll-smooth">
+                
+                <div class="flex gap-3 animate-fade">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="bot" class="w-5 h-5"></i>
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble">
+                        <p class="text-sm leading-relaxed text-slate-700">
+                            Hola Jefe, bienvenido a <strong>ConsultaME</strong>. Estoy listo para informarte sobre el progreso del equipo de innovación. 
+                            <br><br>
+                            ¿Qué te gustaría revisar hoy? Puedes preguntar por un empleado o pedir un resumen general.
+                        </p>
+                        <span class="text-[10px] text-slate-400 mt-2 block">Hoy 09:41 AM</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-4 glass p-2 rounded-2xl border border-slate-200 shadow-xl">
+                <div class="flex gap-2">
+                    <input type="text" id="user-input" placeholder="Escribe 'Resumen' o nombre del empleado..." 
+                           class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm"
+                           onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()" class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Inicializar iconos
+        lucide.createIcons();
+
+        const chatWindow = document.getElementById('chat-window');
+        const userInput = document.getElementById('user-input');
+
+        // Datos simulados (Lo que vendrá de tu base de datos después)
+        const teamData = [
+            { id: "T-101", name: "Carlos Ruiz", task: "Diseño UI App", progress: 75, status: "En Proceso", priority: "Alta" },
+            { id: "T-102", name: "Ana Gomez", task: "API Integración", progress: 40, status: "Bloqueado", priority: "Crítica" },
+            { id: "T-103", name: "Roberto M.", task: "Pruebas QA", progress: 100, status: "Completado", priority: "Media" }
+        ];
+
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (text === "") return;
+
+            // Renderizar mensaje de usuario
+            renderMessage(text, 'user');
+            userInput.value = "";
+
+            // Simular respuesta del Bot
+            setTimeout(() => {
+                botLogic(text.toLowerCase());
+            }, 800);
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendQuickMessage(cmd) {
+            userInput.value = cmd;
+            sendMessage();
+        }
+
+        function renderMessage(content, sender) {
+            const div = document.createElement('div');
+            div.className = `flex gap-3 animate-fade ${sender === 'user' ? 'justify-end' : ''}`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            if (sender === 'user') {
+                div.innerHTML = `
+                    <div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-md max-w-[85%] user-bubble">
+                        <p class="text-sm">${content}</p>
+                        <span class="text-[10px] text-indigo-200 mt-2 block text-right">${time}</span>
+                    </div>
+                `;
+            } else {
+                div.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="bot" class="w-5 h-5"></i>
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble text-sm text-slate-700">
+                        ${content}
+                        <span class="text-[10px] text-slate-400 mt-2 block">${time}</span>
+                    </div>
+                `;
+            }
+
+            chatWindow.appendChild(div);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            lucide.createIcons();
+        }
+
+        function botLogic(text) {
+            if (text.includes('resumen') || text.includes('/resumen')) {
+                let html = "Aquí tienes el estado actual de las tareas clave:<br><br>";
+                teamData.forEach(item => {
+                    const color = item.progress > 70 ? 'bg-emerald-500' : item.progress > 30 ? 'bg-amber-500' : 'bg-rose-500';
+                    const priorityColor = item.priority === 'Crítica' ? 'text-rose-600 bg-rose-50' : 'text-blue-600 bg-blue-50';
+                    
+                    html += `
+                        <div class="mb-4 p-3 border border-slate-100 rounded-xl bg-slate-50">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase">${item.id}</span>
+                                    <h4 class="font-bold text-slate-800">${item.task}</h4>
+                                    <p class="text-xs text-slate-500">Asignado a: ${item.name}</p>
+                                </div>
+                                <span class="text-[10px] px-2 py-1 rounded font-bold ${priorityColor}">${item.priority}</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-2 rounded-full mt-2">
+                                <div class="${color} h-2 rounded-full" style="width: ${item.progress}%"></div>
+                            </div>
+                            <div class="flex justify-between mt-1">
+                                <span class="text-[10px] font-medium text-slate-500">${item.status}</span>
+                                <span class="text-[10px] font-bold text-slate-700">${item.progress}%</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                renderMessage(html, 'bot');
+            } else if (text.includes('ana') || text.includes('carlos') || text.includes('roberto')) {
+                const member = teamData.find(m => text.includes(m.name.toLowerCase().split(' ')[0]));
+                renderMessage(`Buscando detalles de <strong>${member.name}</strong>... <br><br> Actualmente tiene la tarea "${member.task}" al <strong>${member.progress}%</strong>. Estado: <strong>${member.status}</strong>.`, 'bot');
+            } else {
+                renderMessage("No reconozco ese comando. Prueba escribiendo 'Resumen' o el nombre de alguien del equipo.", 'bot');
+            }
+        }
+    </script>
+</body>
+</html>
