@@ -106,7 +106,6 @@
 
         function clearChat() {
             chatWindow.innerHTML = '';
-            // MENSAJE ACTUALIZADO CON NOMBRES
             renderMessage(`
                 Saludos Jefe. Portal de **Innovación** listo. 
                 <br><br>
@@ -157,7 +156,7 @@
                                 <h4 class="font-bold text-indigo-900">${person.name}</h4>
                                 <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority}</span>
                             </div>
-                            <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task}</p>
+                            <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task} <span class="font-bold text-indigo-700">(${person.progress}%)</span></p>
                             <div class="w-full bg-slate-200 h-1.5 rounded-full mb-4">
                                 <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${person.progress}%"></div>
                             </div>
