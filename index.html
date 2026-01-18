@@ -15,8 +15,6 @@
         .user-bubble { border-bottom-right-radius: 2px; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
-        @keyframes alert-glow { 0% { box-shadow: 0 0 0px rgba(239, 68, 68, 0); } 50% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); } 100% { box-shadow: 0 0 0px rgba(239, 68, 68, 0); } }
-        .alert-active { animation: alert-glow 2s infinite; border-color: #fecaca; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -29,12 +27,15 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight">ConsultaME</h1>
-                    <p class="text-xs text-indigo-200">Innovación Bot • <span class="text-green-300">Modo Prueba Activo</span></p>
+                    <p class="text-xs text-indigo-200">Innovación Bot • En línea</p>
                 </div>
             </div>
-            <button onclick="clearChat()" class="bg-white/10 p-2 rounded-lg border border-white/20">
+            <button onclick="clearChat()" class="md:hidden bg-white/10 p-2 rounded-lg border border-white/20">
                 <i data-lucide="eraser" class="w-5 h-5 text-white"></i>
             </button>
+            <div class="hidden md:flex gap-4 text-sm font-medium text-indigo-100 italic">
+                "Gestión y Seguimiento de Proyectos"
+            </div>
         </div>
     </header>
 
@@ -45,23 +46,28 @@
                 <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Estado del Departamento</h2>
                 <div class="space-y-4 text-sm">
                     <div class="flex justify-between"><span>Analistas Activos</span><span class="font-bold text-indigo-600">9</span></div>
-                    <div class="flex justify-between"><span>Alertas Críticas</span><span class="font-bold text-rose-600">3</span></div>
+                    <div class="flex justify-between"><span>Proyectos en Meta</span><span class="font-bold text-emerald-600">88%</span></div>
+                    <div class="flex justify-between"><span>Hitos Pendientes</span><span class="font-bold text-amber-600">3</span></div>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded-2xl shadow-md text-white text-sm text-center">
-                <p class="text-indigo-100 text-[11px] mb-3">ACCIONES RÁPIDAS PARA RAMÓN</p>
-                <div class="grid grid-cols-1 gap-2">
-                    <button onclick="sendQuickMessage('Resumen')" class="bg-white/10 hover:bg-white/20 p-3 rounded-xl text-xs font-bold border border-white/10 transition-all">📊 VER RESUMEN DE RIESGOS</button>
-                    <button onclick="sendQuickMessage('Cesar')" class="bg-emerald-500 hover:bg-emerald-600 p-3 rounded-xl text-xs font-bold transition-all shadow-lg">📱 PROBAR CON CESAR</button>
+            <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded-2xl shadow-md text-white text-sm">
+                <h3 class="font-semibold mb-3 flex items-center gap-2"><i data-lucide="layout" class="w-4 h-4 text-amber-300"></i> Panel de Control</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="sendQuickMessage('Resumen')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-xs">📊 Resumen</button>
+                    <button onclick="sendQuickMessage('Ramon')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-xs font-bold">👑 Ramón</button>
+                    <button onclick="clearChat()" class="col-span-2 mt-2 bg-rose-500 hover:bg-rose-600 p-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                        <i data-lucide="trash-2" class="w-4 h-4 text-white"></i> <span class="text-white">LIMPIAR CHAT</span>
+                    </button>
                 </div>
             </div>
         </aside>
 
         <section class="md:col-span-2 flex flex-col">
             <div id="chat-window" class="chat-container overflow-y-auto p-2 space-y-4 scroll-smooth"></div>
+
             <div class="mt-4 glass p-2 rounded-2xl border border-slate-200 shadow-xl flex gap-2">
-                <input type="text" id="user-input" placeholder="Escribe 'Resumen'..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
+                <input type="text" id="user-input" placeholder="Escribe 'Resumen' o un nombre..." class="flex-1 bg-transparent border-none focus:ring-0 p-3 text-sm" onkeypress="handleKeyPress(event)">
                 <button onclick="sendMessage()" class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition shadow-md"><i data-lucide="send" class="w-5 h-5"></i></button>
             </div>
         </section>
@@ -71,22 +77,25 @@
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
 
-        // CESAR ACTUALIZADO CON TELÉFONO REAL Y PROGRESO BAJO PARA PRUEBA
+        // LISTA COMPLETA CON TELÉFONO DE CESAR ACTUALIZADO
         const teamData = [
-            { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 45, status: "Retrasado", priority: "Alta", phone: "18096011809" },
+            { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 70, status: "En Verificación", priority: "Alta", phone: "18096011809" },
             { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 95, status: "Al Día", priority: "Media", phone: "18090000000" },
-            { id: "PROY-03", name: "Rosanny Contreras", task: "Documentación de Proyectos", progress: 60, status: "Actualizando", priority: "Media", phone: "18090000000" },
-            { id: "PROY-04", name: "Jorge Tonos", task: "Control de Hitos", progress: 40, status: "En Revisión", priority: "Alta", phone: "18090000000" },
-            { id: "PROY-06", name: "Ramon Sanchez", isBoss: true, task: "Reunion POA y PEI", progress: 100, task2: "Reunion sensibilización", progress2: 0 },
-            { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo", progress: 30, status: "Iniciando", priority: "Alta", phone: "18090000000" },
+            { id: "PROY-03", name: "Rosanny Contreras", task: "Documentación de Proyectos en Curso", progress: 60, status: "Actualizando", priority: "Media", phone: "18090000000" },
+            { id: "PROY-04", name: "Jorge Tonos", task: "Control de Hitos y Entregables", progress: 45, status: "En Revisión", priority: "Alta", phone: "18090000000" },
+            { id: "PROY-05", name: "Iris Cesa", task: "Auditoría de Calidad en Proyectos", progress: 95, status: "Casi Listo", priority: "Baja", phone: "18090000000" },
+            { id: "PROY-06", name: "Ramon Sanchez", isBoss: true, task: "Reunion POA y PEI", progress: 100, task2: "Reunion sensibilización directores", progress2: 0 },
+            { id: "PROY-07", name: "Anji Carolina", task: "Evaluación de Resultados Mensuales", progress: 75, status: "En Proceso", priority: "Media", phone: "18090000000" },
+            { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo - Fase 1", progress: 30, status: "Iniciando", priority: "Alta", phone: "18090000000" },
             { id: "PROY-09", name: "Victor Peña", task: "Desarrollo app de IA", progress: 90, status: "En Pruebas", priority: "Alta", phone: "18090000000" }
         ];
 
         function clearChat() {
             chatWindow.innerHTML = '';
             renderMessage(`
-                <b>MODO PRUEBA ACTIVO</b><br><br>
-                Hola Jefe, he detectado que **Cesar Guzman** tiene un retraso. Escribe **"Resumen"** para ver la alerta o **"Cesar"** para enviarle un WhatsApp ahora mismo.
+                Saludos Jefe. Bienvenido al portal de **Innovación**. 
+                <br><br>
+                Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji, Luis o Victor**.
             `, 'bot');
         }
 
@@ -103,58 +112,87 @@
         }
 
         function getWALink(item) {
-            const msg = `Hola ${item.name.split(' ')[0]}, el Director Ramón revisó ConsultaME y vio que "${item.task}" está en ${item.progress}%. Favor informar estatus urgente.`;
+            const msg = `Hola ${item.name.split(' ')[0]}, el Director Ramón solicita estatus urgente de: "${item.task}" (Progreso actual: ${item.progress}%).`;
             return `https://wa.me/${item.phone}?text=${encodeURIComponent(msg)}`;
         }
 
         function botLogic(text) {
             if (text === 'limpiar' || text === 'borrar') { clearChat(); return; }
 
+            // RESUMEN TAL COMO ESTABA (LISTA DE TODOS) + ALERTAS
             if (text.includes('resumen')) {
                 let riesgos = teamData.filter(p => !p.isBoss && p.priority === "Alta" && p.progress < 50);
-                let html = `<div class="space-y-4">
-                    <div class="flex items-center gap-2 text-indigo-700 font-bold border-b pb-2"><i data-lucide="shield-alert" class="w-5 h-5 text-rose-500"></i><span>SITUACIÓN DE RIESGO</span></div>
-                    <div class="space-y-3">
-                        ${riesgos.map(r => `
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl alert-active">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-black text-rose-700 text-xs uppercase">${r.name}</span>
-                                    <span class="bg-rose-600 text-white text-[9px] px-2 py-0.5 rounded-full font-bold animate-pulse">CRÍTICO</span>
-                                </div>
-                                <p class="text-[11px] text-rose-800 mb-3 italic">"${r.task}" - <b>${r.progress}%</b></p>
-                                <a href="${getWALink(r)}" target="_blank" 
-                                   class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg text-[10px] font-bold flex items-center justify-center gap-2 shadow-md transition-all">
-                                   <i data-lucide="message-circle" class="w-4 h-4"></i> NOTIFICAR A CESAR POR WHATSAPP
-                                </a>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>`;
+                let html = "<b>Estado de Proyectos de Innovación:</b><br><br>";
+                
+                if(riesgos.length > 0) {
+                    html += `<div class="bg-rose-50 border border-rose-200 p-2 rounded-lg mb-4 text-[11px] text-rose-700 italic font-semibold">
+                                ⚠️ Hay ${riesgos.length} proyectos de alta prioridad con bajo progreso.
+                             </div>`;
+                }
+
+                teamData.forEach(item => {
+                    if(!item.isBoss) {
+                        html += `<div class="mb-2 text-[11px] flex justify-between items-center border-b border-slate-50 pb-1">
+                                    <span><b>${item.name}:</b> ${item.task} (${item.progress}%)</span>
+                                    ${item.name === "Cesar Guzman" ? `<a href="${getWALink(item)}" target="_blank" class="text-emerald-600 font-bold ml-2">[WhatsApp]</a>` : ''}
+                                 </div>`;
+                    }
+                });
                 renderMessage(html, 'bot');
                 return;
             }
 
             const person = teamData.find(p => text.includes(p.name.toLowerCase().split(' ')[0]));
+            
             if (person) {
                 if (person.isBoss) {
-                     renderMessage(`<div class="p-1"><p class="text-indigo-700 font-bold flex items-center gap-2 mb-2"><i data-lucide="user-check" class="w-4 h-4"></i> Estatus Director Ramón</p><div class="bg-slate-50 p-3 rounded-lg border border-slate-200"><p class="text-xs font-bold text-slate-700">${person.task}</p><div class="w-full bg-emerald-500 h-1.5 rounded-full mt-1"></div><p class="text-right text-[9px] mt-1 text-emerald-600 font-bold">100% COMPLETADO</p></div></div>`, 'bot');
+                    renderMessage(`
+                        <div class="p-1">
+                            <p class="mb-3 text-indigo-700 font-bold flex items-center gap-2">
+                                <i data-lucide="crown" class="w-4 h-4"></i> ¡Saludos, Director Ramón!
+                            </p>
+                            <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 shadow-inner">
+                                <div class="mb-4">
+                                    <h4 class="font-bold text-slate-800 text-xs">${person.task}</h4>
+                                    <div class="w-full bg-slate-200 h-2 rounded-full mt-1">
+                                        <div class="bg-emerald-500 h-2 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                    <p class="text-[10px] text-right mt-1 font-bold text-emerald-600">100% - CONCLUIDO</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-xs">${person.task2}</h4>
+                                    <div class="w-full bg-slate-200 h-2 rounded-full mt-1">
+                                        <div class="bg-rose-500 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <p class="text-[10px] text-right mt-1 font-bold text-rose-600">0% - PENDIENTE</p>
+                                </div>
+                            </div>
+                        </div>
+                    `, 'bot');
                 } else {
                     renderMessage(`
                         <div class="p-1">
-                            <h4 class="font-bold text-indigo-900 mb-1">${person.name}</h4>
-                            <p class="text-xs text-slate-500 mb-3">${person.task}</p>
-                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden mb-4">
-                                <div class="${person.progress < 50 ? 'bg-rose-500' : 'bg-emerald-500'} h-full" style="width:${person.progress}%"></div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold text-indigo-900">${person.name}</h4>
+                                <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority || 'Normal'}</span>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task}</p>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full">
+                                <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${person.progress}%"></div>
+                            </div>
+                            <div class="flex justify-between mt-1 mb-3">
+                                <span class="text-[10px] italic font-medium">${person.status}</span>
+                                <span class="text-[10px] font-bold">${person.progress}%</span>
                             </div>
                             <a href="${getWALink(person)}" target="_blank" 
-                               class="flex items-center justify-center gap-2 bg-emerald-600 text-white py-3 rounded-xl font-bold text-xs hover:bg-emerald-700 transition-all shadow-lg">
-                               <i data-lucide="message-square" class="w-4 h-4"></i> ENVIAR MENSAJE DIRECTO
+                               class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-[10px] font-bold transition-all shadow-md">
+                               <i data-lucide="message-circle" class="w-3 h-3"></i> ENVIAR WHATSAPP A ${person.name.split(' ')[0].toUpperCase()}
                             </a>
                         </div>
                     `, 'bot');
                 }
             } else {
-                renderMessage("Nombre no reconocido. Prueba con 'Cesar' o escribe 'Resumen'.", 'bot');
+                renderMessage("Por favor, introduzca el nombre de un colaborador del departamento.", 'bot');
             }
         }
 
@@ -165,9 +203,14 @@
             userInput.value = "";
             setTimeout(() => { botLogic(text.toLowerCase()); }, 500);
         }
+
         function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
         function sendQuickMessage(msg) { userInput.value = msg; sendMessage(); }
-        window.onload = () => { clearChat(); lucide.createIcons(); };
+
+        window.onload = () => {
+            clearChat();
+            lucide.createIcons();
+        };
     </script>
 </body>
 </html>
