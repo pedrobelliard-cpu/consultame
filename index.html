@@ -77,7 +77,6 @@
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
 
-        // DATOS ACTUALIZADOS CON CORREO REAL DE CESAR
         const teamData = [
             { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 70, status: "En Verificación", priority: "Alta", phone: "18096011889", email: "cesarguzman@infotep.gob.do" },
             { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 95, status: "Al Día", priority: "Media", phone: "18090000000", email: "pbelliard@infotep.gob.do" },
@@ -107,10 +106,11 @@
 
         function clearChat() {
             chatWindow.innerHTML = '';
+            // MENSAJE ACTUALIZADO CON NOMBRES
             renderMessage(`
                 Saludos Jefe. Portal de **Innovación** listo. 
                 <br><br>
-                Consulte el **Resumen** para ver estatus general o escriba un nombre para contacto multicanal (WhatsApp/365).
+                Consulte el **Resumen** para ver estatus general o pregunte por **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji, Luis o Victor** para contacto multicanal (WhatsApp/365).
             `, 'bot');
         }
 
