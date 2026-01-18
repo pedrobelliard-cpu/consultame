@@ -34,7 +34,7 @@
                 <i data-lucide="eraser" class="w-5 h-5 text-white"></i>
             </button>
             <div class="hidden md:flex gap-4 text-sm font-medium text-indigo-100 italic">
-                "Gestión y Seguimiento de Proyectos"
+                "Ecosistema Digital INFOTEP"
             </div>
         </div>
     </header>
@@ -77,25 +77,40 @@
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
 
-        // DATOS ACTUALIZADOS: CESAR CON NÚMERO TERMINADO EN 889
+        // DATOS ACTUALIZADOS CON CORREO REAL DE CESAR
         const teamData = [
-            { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 70, status: "En Verificación", priority: "Alta", phone: "18096011889" },
-            { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 95, status: "Al Día", priority: "Media", phone: "18090000000" },
-            { id: "PROY-03", name: "Rosanny Contreras", task: "Documentación de Proyectos en Curso", progress: 60, status: "Actualizando", priority: "Media", phone: "18090000000" },
-            { id: "PROY-04", name: "Jorge Tonos", task: "Control de Hitos y Entregables", progress: 45, status: "En Revisión", priority: "Alta", phone: "18090000000" },
-            { id: "PROY-05", name: "Iris Cesa", task: "Auditoría de Calidad en Proyectos", progress: 95, status: "Casi Listo", priority: "Baja", phone: "18090000000" },
+            { id: "PROY-01", name: "Cesar Guzman", task: "Seguimiento al Cronograma Trimestral", progress: 70, status: "En Verificación", priority: "Alta", phone: "18096011889", email: "cesarguzman@infotep.gob.do" },
+            { id: "PROY-02", name: "Pedro Belliard", task: "Monitoreo de Indicadores de Gestión", progress: 95, status: "Al Día", priority: "Media", phone: "18090000000", email: "pbelliard@infotep.gob.do" },
+            { id: "PROY-03", name: "Rosanny Contreras", task: "Documentación de Proyectos en Curso", progress: 60, status: "Actualizando", priority: "Media", phone: "18090000000", email: "rcontreras@infotep.gob.do" },
+            { id: "PROY-04", name: "Jorge Tonos", task: "Control de Hitos y Entregables", progress: 45, status: "En Revisión", priority: "Alta", phone: "18090000000", email: "jtonos@infotep.gob.do" },
+            { id: "PROY-05", name: "Iris Cesa", task: "Auditoría de Calidad en Proyectos", progress: 95, status: "Casi Listo", priority: "Baja", phone: "18090000000", email: "icesa@infotep.gob.do" },
             { id: "PROY-06", name: "Ramon Sanchez", isBoss: true, task: "Reunion POA y PEI", progress: 100, task2: "Reunion sensibilización directores", progress2: 0 },
-            { id: "PROY-07", name: "Anji Carolina", task: "Evaluación de Resultados Mensuales", progress: 75, status: "En Proceso", priority: "Media", phone: "18090000000" },
-            { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo - Fase 1", progress: 30, status: "Iniciando", priority: "Alta", phone: "18090000000" },
-            { id: "PROY-09", name: "Victor Peña", task: "Desarrollo app de IA", progress: 90, status: "En Pruebas", priority: "Alta", phone: "18090000000" }
+            { id: "PROY-07", name: "Anji Carolina", task: "Evaluación de Resultados Mensuales", progress: 75, status: "En Proceso", priority: "Media", phone: "18090000000", email: "acarolina@infotep.gob.do" },
+            { id: "PROY-08", name: "Luis Camilo", task: "Supervisión de Campo - Fase 1", progress: 30, status: "Iniciando", priority: "Alta", phone: "18090000000", email: "lcamilo@infotep.gob.do" },
+            { id: "PROY-09", name: "Victor Peña", task: "Desarrollo app de IA", progress: 90, status: "En Pruebas", priority: "Alta", phone: "18090000000", email: "vpena@infotep.gob.do" }
         ];
+
+        function getWALink(item) {
+            const msg = `Hola ${item.name.split(' ')[0]}, el Director Ramón solicita estatus urgente de: "${item.task}" (Progreso actual: ${item.progress}%).`;
+            return `https://wa.me/${item.phone}?text=${encodeURIComponent(msg)}`;
+        }
+
+        function getOutlookLink(item) {
+            const subject = encodeURIComponent(`Requerimiento de Información: ${item.task}`);
+            const body = encodeURIComponent(`Estimado ${item.name.split(' ')[0]},\n\nSe requiere una actualización formal sobre el avance del proyecto "${item.task}", el cual se encuentra actualmente en un ${item.progress}%.\n\nFavor remitir los detalles a la brevedad.\n\nAtentamente,\nRamón Sánchez\nDirector`);
+            return `mailto:${item.email}?subject=${subject}&body=${body}`;
+        }
+
+        function getTeamsLink(email) {
+            return `https://teams.microsoft.com/l/chat/0/0?users=${email}`;
+        }
 
         function clearChat() {
             chatWindow.innerHTML = '';
             renderMessage(`
-                Saludos Jefe. Bienvenido al portal de **Innovación**. 
+                Saludos Jefe. Portal de **Innovación** listo. 
                 <br><br>
-                Puedo darte el **resumen** general o detalles sobre **Cesar, Pedro, Rosanny, Jorge, Iris, Ramon, Anji, Luis o Victor**.
+                Consulte el **Resumen** para ver estatus general o escriba un nombre para contacto multicanal (WhatsApp/365).
             `, 'bot');
         }
 
@@ -111,11 +126,6 @@
             lucide.createIcons();
         }
 
-        function getWALink(item) {
-            const msg = `Hola ${item.name.split(' ')[0]}, el Director Ramón solicita estatus urgente de: "${item.task}" (Progreso actual: ${item.progress}%).`;
-            return `https://wa.me/${item.phone}?text=${encodeURIComponent(msg)}`;
-        }
-
         function botLogic(text) {
             if (text === 'limpiar' || text === 'borrar') { clearChat(); return; }
 
@@ -124,8 +134,11 @@
                 teamData.forEach(item => {
                     if(!item.isBoss) {
                         html += `<div class="mb-2 text-[11px] flex justify-between items-center border-b border-slate-50 pb-1">
-                                    <span><b>${item.name}:</b> ${item.task} (${item.progress}%)</span>
-                                    ${item.name === "Cesar Guzman" ? `<a href="${getWALink(item)}" target="_blank" class="text-emerald-600 font-bold ml-2">[WhatsApp]</a>` : ''}
+                                    <span><b>${item.name}:</b> ${item.progress}%</span>
+                                    <div class="flex gap-2">
+                                        <a href="${getWALink(item)}" target="_blank" class="text-emerald-600 font-bold">[WA]</a>
+                                        <a href="${getOutlookLink(item)}" target="_blank" class="text-blue-600 font-bold">[365]</a>
+                                    </div>
                                  </div>`;
                     }
                 });
@@ -136,31 +149,36 @@
             const person = teamData.find(p => text.includes(p.name.toLowerCase().split(' ')[0]));
             if (person) {
                 if (person.isBoss) {
-                    renderMessage(`<div class="p-1"><p class="mb-3 text-indigo-700 font-bold flex items-center gap-2"><i data-lucide="crown" class="w-4 h-4"></i> ¡Saludos, Director Ramón!</p><div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 shadow-inner"><div class="mb-4"><h4 class="font-bold text-slate-800 text-xs">${person.task}</h4><div class="w-full bg-slate-200 h-2 rounded-full mt-1"><div class="bg-emerald-500 h-2 rounded-full" style="width: 100%"></div></div><p class="text-[10px] text-right mt-1 font-bold text-emerald-600">100%</p></div><div><h4 class="font-bold text-slate-800 text-xs">${person.task2}</h4><div class="w-full bg-slate-200 h-2 rounded-full mt-1"><div class="bg-rose-500 h-2 rounded-full" style="width: 0%"></div></div><p class="text-[10px] text-right mt-1 font-bold text-rose-600">0%</p></div></div></div>`, 'bot');
+                    renderMessage(`<div class="p-1"><p class="mb-3 text-indigo-700 font-bold flex items-center gap-2"><i data-lucide="crown" class="w-4 h-4"></i> Director Ramón Sánchez</p><div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 shadow-inner"><div class="mb-4"><h4 class="font-bold text-slate-800 text-xs">${person.task}</h4><div class="w-full bg-slate-200 h-2 rounded-full mt-1"><div class="bg-emerald-500 h-2 rounded-full" style="width: 100%"></div></div><p class="text-[10px] text-right mt-1 font-bold text-emerald-600">100%</p></div><div><h4 class="font-bold text-slate-800 text-xs">${person.task2}</h4><div class="w-full bg-slate-200 h-2 rounded-full mt-1"><div class="bg-rose-500 h-2 rounded-full" style="width: 0%"></div></div><p class="text-[10px] text-right mt-1 font-bold text-rose-600">0%</p></div></div></div>`, 'bot');
                 } else {
                     renderMessage(`
                         <div class="p-1">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-bold text-indigo-900">${person.name}</h4>
-                                <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority || 'Normal'}</span>
+                                <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority}</span>
                             </div>
                             <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task}</p>
-                            <div class="w-full bg-slate-200 h-1.5 rounded-full">
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full mb-4">
                                 <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${person.progress}%"></div>
                             </div>
-                            <div class="flex justify-between mt-1 mb-3">
-                                <span class="text-[10px] italic">${person.status}</span>
-                                <span class="text-[10px] font-bold">${person.progress}%</span>
+                            
+                            <div class="grid grid-cols-1 gap-2">
+                                <a href="${getWALink(person)}" target="_blank" class="flex items-center justify-center gap-2 bg-emerald-600 text-white py-2 rounded-lg text-[10px] font-bold shadow-sm hover:bg-emerald-700 transition-all">
+                                    <i data-lucide="message-circle" class="w-3 h-3"></i> WHATSAPP
+                                </a>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <a href="${getOutlookLink(person)}" target="_blank" class="flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg text-[10px] font-bold shadow-sm hover:bg-blue-700">
+                                        <i data-lucide="mail" class="w-3 h-3"></i> OUTLOOK
+                                    </a>
+                                    <a href="${getTeamsLink(person.email)}" target="_blank" class="flex items-center justify-center gap-2 bg-indigo-500 text-white py-2 rounded-lg text-[10px] font-bold shadow-sm hover:bg-indigo-600">
+                                        <i data-lucide="messages-square" class="w-3 h-3"></i> TEAMS
+                                    </a>
+                                </div>
                             </div>
-                            ${person.name === "Cesar Guzman" ? `
-                            <a href="${getWALink(person)}" target="_blank" 
-                               class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-[10px] font-bold transition-all shadow-md">
-                               <i data-lucide="message-circle" class="w-3 h-3"></i> ENVIAR WHATSAPP A CESAR
-                            </a>` : ''}
                         </div>`, 'bot');
                 }
             } else {
-                renderMessage("Por favor, introduzca el nombre de un colaborador.", 'bot');
+                renderMessage("Nombre no reconocido. Intente con el nombre de un analista.", 'bot');
             }
         }
 
