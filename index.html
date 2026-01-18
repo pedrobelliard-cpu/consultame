@@ -15,6 +15,9 @@
         .user-bubble { border-bottom-right-radius: 2px; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
+        /* Animación para alertas críticas */
+        @keyframes pulse-red { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .alert-pulse { animation: pulse-red 2s infinite; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -104,7 +107,7 @@
             div.innerHTML = sender === 'user' ? 
                 `<div class="bg-indigo-600 text-white p-4 rounded-2xl shadow-md max-w-[85%] user-bubble text-sm">${content}</div>` :
                 `<div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
-                 <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble text-sm text-slate-700">${content}</div>`;
+                 <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] bot-bubble text-sm text-slate-700 w-full">${content}</div>`;
             chatWindow.appendChild(div);
             chatWindow.scrollTop = chatWindow.scrollHeight;
             lucide.createIcons();
@@ -128,12 +131,45 @@
             }
 
             if (text.includes('resumen')) {
-                let html = "<b>Estado de Proyectos de Innovación:</b><br><br>";
+                // Lógica de Inteligencia: Buscar riesgos (Prioridad Alta + Progreso < 50)
+                let riesgos = teamData.filter(p => !p.isBoss && p.priority === "Alta" && p.progress < 50);
+                
+                let html = `<div class="space-y-4">
+                    <div class="flex items-center gap-2 text-indigo-700 font-bold border-b pb-2">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        <span>RESUMEN EJECUTIVO</span>
+                    </div>`;
+
+                if(riesgos.length > 0) {
+                    html += `
+                    <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 alert-pulse">
+                        <div class="flex items-center gap-2 text-rose-700 font-bold text-xs mb-2">
+                            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                            ALERTA DE RIESGO (${riesgos.length})
+                        </div>
+                        <p class="text-[10px] text-rose-600 mb-2">Los siguientes analistas requieren apoyo inmediato por bajo avance en tareas críticas:</p>
+                        ${riesgos.map(r => `<div class="text-[11px] font-bold text-rose-800">• ${r.name} (${r.progress}%)</div>`).join('')}
+                    </div>`;
+                }
+
+                html += `<div class="grid grid-cols-1 gap-2 mt-2">`;
                 teamData.forEach(item => {
                     if(!item.isBoss) {
-                        html += `<div class="mb-2 text-[11px]"><b>${item.name}:</b> ${item.task} (${item.progress}%)</div>`;
+                        const barColor = item.progress < 50 ? 'bg-rose-500' : (item.progress < 80 ? 'bg-amber-500' : 'bg-emerald-500');
+                        html += `
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-[11px] text-slate-700">${item.name}</span>
+                                <span class="text-[10px] font-black ${item.progress < 50 ? 'text-rose-600' : 'text-slate-500'}">${item.progress}%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full">
+                                <div class="${barColor} h-1.5 rounded-full transition-all duration-500" style="width: ${item.progress}%"></div>
+                            </div>
+                        </div>`;
                     }
                 });
+                html += `</div></div>`;
+                
                 renderMessage(html, 'bot');
                 return;
             }
@@ -166,17 +202,21 @@
                         </div>
                     `, 'bot');
                 } else {
+                    const isAlert = person.priority === "Alta" && person.progress < 50;
                     renderMessage(`
-                        <div class="p-1">
+                        <div class="p-1 ${isAlert ? 'border-l-4 border-rose-500 pl-3' : ''}">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-bold text-indigo-900">${person.name}</h4>
-                                <span class="text-[9px] bg-indigo-100 px-2 py-0.5 rounded text-indigo-700 font-bold">${person.priority || 'Normal'}</span>
+                                <span class="text-[9px] ${isAlert ? 'bg-rose-100 text-rose-700' : 'bg-indigo-100 text-indigo-700'} px-2 py-0.5 rounded font-bold">${person.priority}</span>
                             </div>
                             <p class="text-xs text-slate-600 mb-2"><b>Proyecto:</b> ${person.task}</p>
                             <div class="w-full bg-slate-200 h-1.5 rounded-full">
-                                <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${person.progress}%"></div>
+                                <div class="${isAlert ? 'bg-rose-500' : 'bg-indigo-600'} h-1.5 rounded-full" style="width: ${person.progress}%"></div>
                             </div>
-                            <div class="flex justify-between mt-1"><span class="text-[10px] italic">${person.status}</span><span class="text-[10px] font-bold">${person.progress}%</span></div>
+                            <div class="flex justify-between mt-1">
+                                <span class="text-[10px] italic ${isAlert ? 'text-rose-600 font-bold' : 'text-slate-500'}">${person.status}</span>
+                                <span class="text-[10px] font-bold">${person.progress}%</span>
+                            </div>
                         </div>
                     `, 'bot');
                 }
