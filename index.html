@@ -19,6 +19,16 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
 
+    <div id="loading-screen" class="fixed inset-0 bg-slate-50 z-[100] flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative">
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+        </div>
+        <h2 id="loading-text" class="mt-6 text-sm font-semibold text-slate-700 animate-pulse">Estableciendo conexión segura...</h2>
+        <div class="mt-2 flex items-center gap-2 text-xs text-slate-400">
+            <i data-lucide="shield-check" class="w-3 h-3"></i> Microsoft Graph API
+        </div>
+    </div>
+
     <header class="bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-50">
         <div class="max-w-5xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -190,7 +200,26 @@
         }
         function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
         function sendQuickMessage(msg) { userInput.value = msg; sendMessage(); }
-        window.onload = () => { clearChat(); lucide.createIcons(); };
+        
+        // LOGICA DE CARGA FALSA
+        window.onload = () => {
+            lucide.createIcons();
+            const loader = document.getElementById('loading-screen');
+            const text = document.getElementById('loading-text');
+
+            // Secuencia de simulación
+            setTimeout(() => { text.innerHTML = "Autenticando en Azure Active Directory..."; }, 1500);
+            setTimeout(() => { text.innerHTML = "Conectando a SharePoint: 'Plan_Innovacion_2025'..."; }, 3000);
+            setTimeout(() => { text.innerHTML = "Sincronizando estados desde OneDrive..."; }, 4500);
+            
+            setTimeout(() => {
+                loader.style.opacity = '0'; // Desvanecer
+                setTimeout(() => {
+                    loader.style.display = 'none'; // Quitar del DOM
+                    clearChat(); // Iniciar el bot real
+                }, 700);
+            }, 5500);
+        };
     </script>
 </body>
 </html>
